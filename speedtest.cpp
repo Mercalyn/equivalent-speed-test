@@ -5,8 +5,8 @@
 /*
 speed test
 qty 2 prefilled array size [12k, 12k] multiplying into the first,
-10 iterations
-consistent result: 5.72 sec
+20 iterations
+consistent result: 5480 5760 5950 6000 6160
 */
 
 int const SIZE_X_ARRAY = 12000;
