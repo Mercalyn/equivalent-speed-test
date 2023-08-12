@@ -1,10 +1,10 @@
 /*
 speed test
 qty 2 prefilled array size [12k, 12k] multiplying into the first,
-10 iterations
+20 iterations
 consistent result: 
-cpu: *crashed, unable to complete due to high MEM useage
-gpu: variable 1.27 - 1.38 secs
+cpu: 3280 3300 3310 3310 3320
+gpu: 960 1040 1130 1140 1310
 */
 
 // setup
@@ -13,7 +13,7 @@ import chalk from 'chalk';
 import { GPU } from 'gpu.js';
 const gpu = new GPU();
 
-const iterations = 10;
+const iterations = 20;
 const gpuSettings = {
     pipeline: true,
     dynamicOutput: true, // do NOT set immutable to true, will crash gpu high MEM useage
@@ -64,7 +64,7 @@ const mainLoop = async _ => {
     // timer
     console.time("time");
     for(let i = 0; i < iterations; i++){ // must comment out resCpu or resGpu
-        //let cpuA = cpumult(cpuA, cpuB);
+        //cpuA = cpumult(cpuA, cpuB);
         let resGpu = gpumult(textureA, textureB);
     };
     console.timeEnd("time");
@@ -73,6 +73,7 @@ const mainLoop = async _ => {
     // spot check
     //console.log(cpuA[0][0]); // cpu
     //console.log(textureA.toArray()[0][0]); // gpu
+    //cpuA = cpumult(cpuA, cpuB);
     
     // cleanup
     textureA.delete();
