@@ -1,9 +1,8 @@
 /*
 speed test
 qty 2 prefilled array size [12k, 12k] multiplying into the first,
-10 iterations
-consistent result: 1.250 secs
-it doesn't seem like its cheating, as number of iterations does not change prefill time(expected), and does change score time(also expected)
+20 iterations
+consistent result: 2340 2360 2360 2360 2640
 */
 
 import java.util.Arrays;
@@ -11,7 +10,7 @@ import java.util.Random;
 public class Speedtest2 {
     public static final int xSize = 12000;
     public static final int ySize = 12000;
-    public static final int iterations = 10;
+    public static final int iterations = 20;
     double[][] aArray = new double[ySize][xSize];
     double[][] bArray = new double[ySize][xSize];
     
