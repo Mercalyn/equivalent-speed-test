@@ -3,6 +3,7 @@ speed test
 qty 2 prefilled array size [12k, 12k] multiplying into the first,
 10 iterations
 highly variable results: 650 700 773 818 820 853 920 922 1100
+20 iterations: 2140 2260 2290 2340 2370
 */
 
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.Random;
 public class SpeedThread {
     public static final int xSize = 12000;
     public static final int ySize = 12000;
-    public static final int iterations = 10;
+    public static final int iterations = 20;
     static double[][] aArray = new double[ySize][xSize];
     double[][] bArray = new double[ySize][xSize];
     
