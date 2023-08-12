@@ -7,12 +7,13 @@
 speed test using multithreading
 qty 2 prefilled array size [12k, 12k] multiplying into the first,
 10 iterations(threaded)
-consistent result: 875ms -- WOW!
+consistent result: 869 875 886 906 913 940 957
+20 iterations: 2045 2130 2220 2260 2410
 */
 
 int const SIZE_X_ARRAY = 12000;
 int const SIZE_Y_ARRAY = 12000;
-int const NUM_ITERATIONS = 10;
+int const NUM_ITERATIONS = 20;
 
 // seed random from c++11 random
 std::random_device rd;
