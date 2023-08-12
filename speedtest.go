@@ -3,10 +3,10 @@ package main
 /*
 speed test
 qty 2 prefilled array size [12k, 12k] multiplying into the first,
-10 iterations
+20 iterations
 consistent result:
-reg loop: 4.5 sec
-goroutines: 761 915 917 921 951 981 981
+reg loop: 8930 9050 9230
+goroutines: 2070 2280 2300 2320 2330
 */
 
 import (
@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	numLoops   int = 10
+	numLoops   int = 20
 	sizeXArray int = 12000
 	sizeYArray int = 12000
 )
@@ -86,7 +86,7 @@ func main() {
 	timerNow := time.Now()
 	for i := 0; i < numLoops; i++ {
 		wg.Add(1)
-		go process(&aArr, &bArr, wg)
+		process(&aArr, &bArr, wg)
 	}
 	
 	// wait on waitgroup then stop timer
