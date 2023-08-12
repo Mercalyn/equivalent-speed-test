@@ -6,8 +6,7 @@ qty 2 prefilled array size [12k, 12k] multiplying into the first,
 10 iterations
 consistent result:
 reg loop: 4.5 sec
-goroutines: 940 ms
-i think go is natively using multi cpu cores making it quick by default, whereas my c/c++ program do not
+goroutines: 761 915 917 921 951 981 981
 */
 
 import (
@@ -85,16 +84,16 @@ func main() {
 
 	// start timer, process
 	timerNow := time.Now()
-	timerStart := (timerNow.Second() * 1e9) + timerNow.Nanosecond()
 	for i := 0; i < numLoops; i++ {
 		wg.Add(1)
 		go process(&aArr, &bArr, wg)
 	}
-
+	
 	// wait on waitgroup then stop timer
 	wg.Wait()
-	timerNow = time.Now()
-	timerEnd := (timerNow.Second() * 1e9) + timerNow.Nanosecond()
+	timerNowEnd := time.Now()
+	timerStart := (timerNow.Second() * 1e9) + timerNow.Nanosecond()
+	timerEnd := (timerNowEnd.Second() * 1e9) + timerNowEnd.Nanosecond()
 	timerFinal := (timerEnd - timerStart) / 1000000
 	//fmt.Println(aArr[11000][11000])
 	fmt.Println(timerFinal, "ms")
@@ -102,5 +101,5 @@ func main() {
 	// added a post timer function to make sure it isn't cheating
 	postAdd(&aArr)
 	postAdd(&bArr)
-	//fmt.Println(aArr[11000][11000])
+	fmt.Println(aArr[11000][11000])
 }
