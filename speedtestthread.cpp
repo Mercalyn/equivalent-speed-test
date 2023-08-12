@@ -1,12 +1,13 @@
 #include <iostream>
 #include <chrono>
 #include <random>
+#include <thread>
 
 /*
-speed test
+speed test using multithreading
 qty 2 prefilled array size [12k, 12k] multiplying into the first,
-10 iterations
-consistent result: 5.72 sec
+10 iterations(threaded)
+consistent result: 875ms -- WOW!
 */
 
 int const SIZE_X_ARRAY = 12000;
@@ -19,7 +20,7 @@ std::mt19937 mt(rd());
 std::uniform_real_distribution<double> dist(.0001, 2.000);
 
 
-// run this process for num iterations
+// run ea process as a thread
 void process(double* aPtrs[], double* bPtrs[]){
     for(int y = 0; y < SIZE_Y_ARRAY; y++){
         for(int x = 0; x < SIZE_X_ARRAY; x++){
@@ -38,34 +39,47 @@ void prefill(double* arrayPtrs[]){
 }
 
 int main(){
-    // 2 new pointer arrays of pointers
+    // qty: 2, 2d arrays (pointer arrays of pointers)
     double* aPtrs[SIZE_Y_ARRAY];
     double* bPtrs[SIZE_Y_ARRAY];
     for(int y = 0; y < SIZE_Y_ARRAY; y++){
         aPtrs[y] = new double[SIZE_X_ARRAY];
         bPtrs[y] = new double[SIZE_X_ARRAY];
     }
+    // array of threads
+    std::thread processThreads[NUM_ITERATIONS];
+    
     
     // prefill
     prefill(aPtrs);
     prefill(bPtrs);
+    std::cout << "done prefilling\n";
+
 
     // timer init
     using std::chrono::high_resolution_clock;
     using std::chrono::duration_cast;
     using std::chrono::duration;
     using std::chrono::milliseconds;
-
-    // start timer and loop
     auto t1 = high_resolution_clock::now();
+
+
+    // process the work using threads
     for(int i = 0; i < NUM_ITERATIONS; i++){
-        process(aPtrs, bPtrs);
+        //process(aPtrs, bPtrs); // old non multi threaded
+        processThreads[i] = std::thread(process, aPtrs, bPtrs);
+    }
+    // wait for all threads
+    for(int i = 0; i < NUM_ITERATIONS; i++){
+        processThreads[i].join(); // i cannot believe this works
     }
     
-    // get end timer and print out
+    
+    //stop timer and print out
     auto t2 = high_resolution_clock::now();
     auto ms_int = duration_cast<milliseconds>(t2 - t1);
     std::cout << ms_int.count() << "ms\n";
+
 
     // debug test if it actually did the work
     /*
