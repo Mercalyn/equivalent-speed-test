@@ -29,6 +29,7 @@ void process(double* aPtrs[], double* bPtrs[]){
     }
 }
 
+// might as well prefill as thread as well
 void prefill(double* arrayPtrs[]){
     for(int y = 0; y < SIZE_Y_ARRAY; y++){
         for(int x = 0; x < SIZE_X_ARRAY; x++){
@@ -46,13 +47,16 @@ int main(){
         aPtrs[y] = new double[SIZE_X_ARRAY];
         bPtrs[y] = new double[SIZE_X_ARRAY];
     }
-    // array of threads
+    // array of threads (only for num iterations and processing threads)
     std::thread processThreads[NUM_ITERATIONS];
     
     
-    // prefill
-    prefill(aPtrs);
-    prefill(bPtrs);
+    // prefill threads (separate from above)
+    std::thread aPre(prefill, aPtrs);
+    std::thread bPre(prefill, bPtrs);
+    // wait on both prefills
+    aPre.join();
+    bPre.join();
     std::cout << "done prefilling\n";
 
 
