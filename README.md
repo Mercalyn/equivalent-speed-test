@@ -6,3 +6,5 @@ as well as compare a standard test across the board to see generally how well ev
 the test is very specific to my future needs:
 2d texture multiplications(about a billion in total) that can be done in parallel(if the structure supports it), done sequentially.
 it sort of emulates the mass multiplications I'll need for my neuro-evolution library
+
+see current results.png for the results!
