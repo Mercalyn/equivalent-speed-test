@@ -9,6 +9,11 @@ Y_SIZE = 12000
 X_SIZE = 12000
 ITERATIONS = 20
 
+
+def process(a, b):
+    return np.multiply(a, b)
+
+
 # create 2d array from random, it says it is a float64, and yet, it seems to capout at 8 decimals?
 a_arr = np.random.uniform(0, 2, (Y_SIZE, X_SIZE))
 b_arr = np.random.uniform(0, 2, (Y_SIZE, X_SIZE))
@@ -22,9 +27,9 @@ print("done prefilling")
 # start timer and exec
 start = time.perf_counter()
 for iter in range(ITERATIONS):
-    # inside num iterations
     #print(iter)
-    a_arr = np.multiply(a_arr, b_arr)
+    #a_arr = np.multiply(a_arr, b_arr)
+    a_arr = process(a_arr, b_arr)
     
 # stop timer
 end = time.perf_counter()
