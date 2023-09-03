@@ -5,8 +5,8 @@ equivalent speed test was made for myself to have a concrete entry point into so
 the comparison is more about comparing my ability in those languages, for example, my inexperience in C is definitely the factor in why it has such a bad score.
 
 the test is very specific to my future needs:
-2d texture multiplications(2.88 billion in total) that can be done in parallel(if the structure supports it), done sequentially.
-it sort of emulates the mass multiplications I'll need for my neuro-evolution library(without specifically needing to write matrix multiplication in every language)
+2d texture multiplications(2.88 billion in total) that can be done in parallel(if the structure supports it), done sequentially. elementwise, not matrix mult.
+it sort of emulates the mass multiplications I'll need for my neuro-evolution library
 
 results: 
 ![current results](https://github.com/Mercalyn/equivalent-speed-test/blob/main/results3.png?raw=true)
