@@ -1,21 +1,18 @@
 # speed test
 # qty 2 prefilled array size [12k, 12k] multiplying into the first,
-# 20 iterations: 6360 6380 6390 6400 7110
+# 20 iterations: 2630 2660 2670 2700 2720
 
 const global SIZE_X = 12000
 const global SIZE_Y = 12000
 const global ITERATIONS = 20
 
-function process(a, b)
-    return a .* b
-end
-
-function processHandler(aArr, bArr)
+#note that the func! means it modifies one or more of its arguments, instead of passing in a pointer prob
+function process!(aArr, bArr)
+    # process ITERATIONS num of times
     for iter = 1:ITERATIONS
-        # process ITERATIONS num of times
-        aArr = process(aArr, bArr)
+        # element-wise mult
+        aArr .*= bArr
     end
-    return aArr
 end
 
 function main()
@@ -28,7 +25,7 @@ function main()
     #println(bArr)
     
     # start timer
-    @time aArr = processHandler(aArr, bArr)
+    @time process!(aArr, bArr)
     
     #println(aArr)
 end
