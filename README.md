@@ -6,7 +6,7 @@ the comparison is more about comparing my ability in those languages, for exampl
 
 the test is very specific to my future needs:
 2d texture multiplications(2.88 billion in total) that can be done in parallel(if the structure supports it), done sequentially.
-it sort of emulates the mass multiplications I'll need for my neuro-evolution library
+it sort of emulates the mass multiplications I'll need for my neuro-evolution library(without specifically needing to write matrix multiplication in every language)
 
 results: 
 ![current results](https://github.com/Mercalyn/equivalent-speed-test/blob/main/results3.png?raw=true)
