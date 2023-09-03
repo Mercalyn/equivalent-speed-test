@@ -9,4 +9,4 @@ the test is very specific to my future needs:
 it sort of emulates the mass multiplications I'll need for my neuro-evolution library
 
 results: 
-![current results](https://github.com/Mercalyn/equivalent-speed-test/blob/main/results3.png?raw=true)
+![current results](https://github.com/Mercalyn/equivalent-speed-test/blob/main/results5.png?raw=true)
