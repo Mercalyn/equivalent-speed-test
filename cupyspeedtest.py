@@ -1,17 +1,15 @@
 import cupy as gp
 import numpy as np
 import time
+import math
 
 # speed test
 # qty 2 prefilled array size [12k, 12k] multiplying into the first,
-# 20 iterations: nothing outside of the 0th grid/thread will actually calc...
-# see http://users.wfu.edu/choss/CUDA/docs/Lecture%205.pdf
-# but something in CuPy is limiting me from allocating anywhere lcose to the maximum number of block*threads that I need
-# I seem to be limited to 20 blocks of 20 threads in x, and y, which is not a lot of data....
+# 20 iterations: 200 200 200 200 200
 
-Y_SIZE = 3
-X_SIZE = 6
-ITERATIONS = 1
+Y_SIZE = 12000
+X_SIZE = 12000
+ITERATIONS = 20
 
 
 def process(a, b):
@@ -20,47 +18,55 @@ def process(a, b):
 
 process_kernel = gp.RawKernel(r'''
 extern "C" __global__
-void my_mult(const double* a, const double* b, double* c, int xWidth) {
+void my_mult(double* a, const double* b, int xWidth, int total) {
     int x = (blockDim.x * blockIdx.x) + threadIdx.x;
     int y = (blockDim.y * blockIdx.y) + threadIdx.y;
-    int f = (y * xWidth) + x;
-    //c[f] = a[f] * b[f];
-    c[f] = f;
+    int gid = (y * xWidth) + x;
+                              
+    if(gid < total){
+        a[gid] *= b[gid];
+    }
 }
 ''', 'my_mult') # if you are going to write C kernels, just switch to C++ fam
 
 
 element_process_kernel = gp.ElementwiseKernel(
-    'float64 a, float64 b',
+    'raw float64 a, float64 b', # by adding raw in front of a, you can then manually index
     'float64 c',
-    'c = a * b',
+    'c = a[7]', # flat array style, despite it being a 2d array, in kernel it is flat
     'element_process_kernel'
 ) # this has less control over a lot of dimensions
 
 
 # create 2d array from random
+print("prefilling... ")
 a_arr = gp.random.uniform(0, 2, (Y_SIZE, X_SIZE), dtype=np.float64)
 b_arr = gp.random.uniform(0, 2, (Y_SIZE, X_SIZE), dtype=np.float64)
-c_arr = a_arr
-print(a_arr)
-print(b_arr)
-print("done prefilling")
+print(a_arr[Y_SIZE - 1][X_SIZE - 1])
+print(b_arr[Y_SIZE - 1][X_SIZE - 1])
+#print(b_arr)
 
-#
-tpb = (2, 2) # threads per block
-bpg = (2, 2) # blocks per grid, these are set to max number I can have them at
+# dims and sizes
+numThreads = (32, 32) # threads per block, 2d max 32, 32
+numBlocks = ( # blocks per grid
+    math.ceil(Y_SIZE / numThreads[0]), 
+    math.ceil(X_SIZE / numThreads[1]),
+)
 
 # start timer and exec
+print("processing... ")
 start = time.perf_counter()
 for iter in range(ITERATIONS):
     #print(iter)
-    process_kernel(bpg, tpb, (a_arr, b_arr, c_arr, X_SIZE)) #(y,), (x,)
+    process_kernel(numBlocks, numThreads, (a_arr, b_arr, X_SIZE, (X_SIZE * Y_SIZE))) #(y,), (x,)
     #element_process_kernel(a_arr, b_arr, a_arr)
-    a_arr = c_arr
-    print(c_arr)
     
+gp.cuda.runtime.deviceSynchronize()
+
 # stop timer
 end = time.perf_counter()
 print("{:.2f}".format((end - start) * 1000), "ms")
+print()
 
-print(c_arr)
+#print(a_arr)
+print(a_arr[Y_SIZE - 1][X_SIZE - 1])
